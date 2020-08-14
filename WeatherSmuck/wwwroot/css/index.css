@@ -1,0 +1,25 @@
+﻿h1 {
+    padding: 30px 0;
+}
+#addressForm {
+    max-width: 800px;
+}
+#alert {
+    display: none;
+    z-index: 1050;
+    position: relative;
+    margin: 50px auto;
+    max-width: 800px;
+}
+#weather_div {
+    padding-top: 50px;
+    display: none;
+    text-align: center;
+}
+.h {
+    display: none;
+}
+#dicon .card-body {
+    text-align: center;
+    font-size: 50px;
+}

@@ -1,0 +1,70 @@
+﻿@page
+@model WeatherSmuck.Pages.IndexModel
+@{
+    ViewData["Title"] = "WeatherSmuck";
+    Layout = "~/Pages/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>WeatherSmuck - know your weather</h1>
+            <form id="addressForm">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Enter your address</label>
+                    <input type="text" class="form-control" id="address" aria-describedby="addressHelp" placeholder="Moscow">
+                    <small id="addressHelp" class="form-text text-muted">We'll never share your address with anyone else.</small>
+                </div>
+            </form>
+            <div id="alert" class="alert alert-danger" role="alert">
+                <button type="button" class="close" aria-label="Close" onclick="$('#alert').hide()"><span aria-hidden="true">×</span></button>
+                <p></p>
+            </div>
+            <br />
+            <div id="map" style="max-width: 800px; height: 500px"></div>
+        </div>
+        <div id="weather_div" class="col-md-4">
+            <h3 id="addr"></h3>
+            <div class="card h" id="dicon">
+                <div class="card-body">
+                    <i id="icon">&nbsp;</i>
+                </div>
+            </div>
+            <div class="card h" id="dcloudness">
+                <div class="card-header">
+                    Cloudness
+                </div>
+                <div class="card-body">
+                    <p id="cloudness" class="card-text">&nbsp;</p>
+                </div>
+            </div>
+            <div class="card h" id="dwind">
+                <div class="card-header">
+                    Wind
+                </div>
+                <div class="card-body">
+                    <p id="wind" class="card-text">&nbsp;</p>
+                </div>
+            </div>
+            <div class="card h" id="dtemp">
+                <div class="card-header">
+                    Temperature
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li id="temp" class="list-group-item">&nbsp;</li>
+                    <li id="feels_like" class="list-group-item">&nbsp;</li>
+                    <li id="temp_max" class="list-group-item">&nbsp;</li>
+                    <li id="temp_min" class="list-group-item">&nbsp;</li>
+                </ul>
+            </div>
+            <div class="card h" id="dhumidity">
+                <div class="card-header">
+                    Humidity
+                </div>
+                <div class="card-body">
+                    <p id="humidity" class="card-text">&nbsp;</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
