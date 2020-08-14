@@ -3,7 +3,7 @@
 
 Web application. Medium difficulty.
 
-Try it (here)[https://dzotov.ddns.net].
+Try it [here](https://dzotov.ddns.net).
 
 ![WeatherSmuck Demo](Images/demo.gif)
 
@@ -30,7 +30,7 @@ Open in browser: http://localhost:5000
 Tested in Chrome and Firefox.
 
 ### Known issues
-The territory is not fully restricted by Moscow bounds. It was made by adding "Moscow" in search geoprovider but should be done by bounds.
+The territory is not fully restricted by Moscow bounds. It was made by adding "Moscow" in search geoprovider but should be done by setting bounds.
 
 It's better to check the status of OpenWeatherMap API before user starts to choose the address.
 
