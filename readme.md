@@ -34,5 +34,5 @@ The territory is not fully restricted by Moscow bounds. It was made by adding "M
 
 It's better to check the status of OpenWeatherMap API before user starts to choose the address.
 
-Need to make the possibility to select an address by clicking on the map.
+~~Need to make the possibility to select an address by clicking on the map.~~ It's ready, but the code in js is more complicated now.
 

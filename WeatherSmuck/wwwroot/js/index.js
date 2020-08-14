@@ -5,7 +5,7 @@
     .build();
 
 let map;
-let readyToSearch = false;
+let placemark;
 
 function fetchError(err) {
     if (typeof err === 'string' || err instanceof String)
@@ -30,18 +30,23 @@ var getCoordinates = function(address) {
             let coords = obj.geometry.getCoordinates();
             // Bounds of the object
             let bounds = obj.properties.get('boundedBy');
-            obj.options.set('preset', 'islands#darkBlueDotIconWithCaption');
-            obj.properties.set('iconCaption', obj.getAddressLine());
+            
+            if (placemark) {
+                placemark.geometry.setCoordinates(coords);
+            } else {
+                placemark = obj;
+                placemark.options.set('preset', 'islands#darkBlueDotIconWithCaption');
+                map.geoObjects.add(placemark);
+            }
+            let addressLine = obj.getAddressLine();
+            placemark.properties.set('iconCaption', addressLine);
 
-            // Clear the map and add the object on the map
-            map.geoObjects.removeAll();
-            map.geoObjects.add(obj);
             // Zoom the map
             map.setBounds(bounds, {
                 checkZoomRange: true
             });
 
-            $("#addr")[0].innerText = obj.getAddressLine();
+            $("#addr")[0].innerText = addressLine;
             getWeather(coords);
         });
     }
@@ -102,12 +107,60 @@ var setWeather = function (w) {
     console.log(w);
 }
 
+
+var addPlacemark = function(coords) {
+    if (placemark) {
+        placemark.geometry.setCoordinates(coords);
+    }
+    else {
+        placemark = new ymaps.Placemark(coords,
+            {
+                iconCaption: 'searching...'
+            },
+            {
+                preset: 'islands#darkBlueDotIconWithCaption',
+                draggable: true
+            });
+        map.geoObjects.add(placemark);
+        placemark.events.add('dragend', function () {
+            getAddress(placemark.geometry.getCoordinates());
+        });
+    }
+}
+
+// Get address by coordinates
+// See here: https://tech.yandex.ru/maps/jsbox/2.1/event_reverse_geocode
+function getAddress(coords) {
+    placemark.properties.set('iconCaption', 'поиск...');
+    ymaps.geocode(coords).then(function (res) {
+        let firstGeoObject = res.geoObjects.get(0);
+        placemark.properties
+            .set({
+                iconCaption: [
+                    firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                    firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                ].filter(Boolean).join(', '),
+                balloonContent: firstGeoObject.getAddressLine()
+            });
+        $("#addr")[0].innerText = placemark.properties.get("iconCaption");
+    });
+}
+
 ymaps.ready(() => {
+    // Map initialization
     map = new ymaps.Map("map", {
         center: [55.76, 37.64], // Moscow
         zoom: 10,
-        controls: ['zoomControl', 'fullscreenControl']
+        controls: ['zoomControl', 'fullscreenControl', 'geolocationControl']
     });
+
+    map.events.add('click', function (e) {
+        let coords = e.get('coords');
+        addPlacemark(coords);
+        getAddress(coords);
+        getWeather(coords);
+    });
+
     var suggestView = new ymaps.SuggestView('address',
         {
             results: 4,
@@ -129,6 +182,7 @@ ymaps.ready(() => {
 });
 
 $(document).ready(() => {
+    // prevent default action on Enter keypress
     $('#address').on('keypress', function (e) {
         const k = e.keyCode || e.which;
         if (k === 13) {
