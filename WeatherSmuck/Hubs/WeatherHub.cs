@@ -29,6 +29,7 @@ namespace WeatherSmuck.Hubs
 		{
 			try
 			{
+				Log.Info("GetCurrentWeather");
 				return await Provider.GetCurrentWeather(request);
 			}
 			catch (Exception ex)
